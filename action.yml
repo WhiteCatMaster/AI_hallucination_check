@@ -1,0 +1,45 @@
+# action.yml
+# Definición de la GitHub Action "ai-hallucination-detector".
+# Esta Action se ejecuta dentro de un contenedor Docker y analiza los Pull
+# Requests en busca de código generado por IA con alucinaciones.
+
+name: 'AI Hallucination Detector'
+description: >-
+  Analiza los Pull Requests para detectar dependencias inexistentes (paquetes
+  alucinados), código desactualizado (knowledge cutoff) y tests tautológicos.
+author: 'inigopeleteiro'
+
+# Personalización del icono y color en el GitHub Marketplace.
+branding:
+  icon: 'alert-triangle'
+  color: 'red'
+
+inputs:
+  github_token:
+    description: >-
+      Token de GitHub usado para leer el PR y publicar comentarios.
+      Normalmente se pasa como ${{ secrets.GITHUB_TOKEN }}.
+    required: true
+  llm_api_key:
+    description: >-
+      Clave de API del LLM (OpenAI/Anthropic) usada para evaluar los tests
+      tautológicos. Si no se proporciona, ese análisis se omite.
+    required: false
+    default: ''
+  fail_on_warning:
+    description: >-
+      Si es 'true', la Action falla (exit 1) también ante hallazgos leves.
+      Por defecto solo falla ante alucinaciones graves.
+    required: false
+    default: 'false'
+
+# La Action se ejecuta usando una imagen Docker construida a partir del
+# Dockerfile presente en la raíz del repositorio de la Action.
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  # Los inputs se inyectan como variables de entorno hacia el contenedor.
+  env:
+    INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+    INPUT_LLM_API_KEY: ${{ inputs.llm_api_key }}
+    INPUT_FAIL_ON_WARNING: ${{ inputs.fail_on_warning }}

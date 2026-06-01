@@ -1,0 +1,7 @@
+# Dependencias de desarrollo (no se incluyen en la imagen de la Action).
+
+# Incluye las dependencias de runtime para poder importar main.py en los tests.
+-r requirements.txt
+
+# Framework de testing.
+pytest==8.2.2

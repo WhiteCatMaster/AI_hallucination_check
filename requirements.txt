@@ -1,0 +1,10 @@
+# Dependencias de la Action "ai-hallucination-detector".
+
+# Cliente de la API de GitHub: autenticación, lectura del PR y comentarios.
+PyGithub==2.3.0
+
+# Cliente HTTP para consultar registros de paquetes (PyPI, npm).
+requests==2.32.3
+
+# Cliente del LLM usado como "Juez de QA" para los tests tautológicos.
+openai==1.40.0

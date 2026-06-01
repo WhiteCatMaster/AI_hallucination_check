@@ -1,0 +1,40 @@
+# .github/workflows/test-action.yml
+# Workflow de ejemplo que ejecuta la Action "ai-hallucination-detector"
+# sobre los Pull Requests del propio repositorio.
+
+name: AI Hallucination Detector
+
+# Se dispara en cada apertura, reapertura o nuevo push a un PR.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Permisos mínimos necesarios:
+# - contents: read  -> leer los archivos del repositorio.
+# - pull-requests: write -> publicar comentarios con los hallazgos en el PR.
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  detect-hallucinations:
+    name: Detectar alucinaciones de IA
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clona el repositorio para que la Action pueda construir su imagen
+      #    Docker (uses: ./) a partir del código local.
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # 2. Ejecuta la Action local (apunta a la raíz donde está action.yml).
+      #    Para consumirla desde otro repo se usaría:
+      #      uses: tu-usuario/ai-hallucination-detector@v1
+      - name: Ejecutar AI Hallucination Detector
+        uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Opcional: necesario solo para la evaluación de tests tautológicos.
+          llm_api_key: ${{ secrets.OPENAI_API_KEY }}
+          # Por defecto solo fallan los hallazgos críticos.
+          fail_on_warning: 'false'

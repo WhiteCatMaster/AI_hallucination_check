@@ -1,0 +1,27 @@
+# Control de versiones
+.git
+.gitignore
+.github
+
+# Caché y bytecode de Python
+__pycache__
+*.py[cod]
+*.egg-info
+.pytest_cache
+.mypy_cache
+.ruff_cache
+
+# Entornos virtuales
+.venv
+venv
+env
+.env
+
+# Artefactos de editores / IDE
+.idea
+.vscode
+*.swp
+
+# Documentación y metadatos no necesarios en la imagen
+README.md
+LICENSE
